@@ -13,7 +13,7 @@ for ext in supported_ext:
 
 
 for file in files:
-    # os.path.splitext return a typle 1element is name of file last element is the extension name
+    # os.path.splitext return a tuple 1element is name of file last element is the extension name
     _, file_extension = os.path.splitext(file)
     # slicing the string because the first character is the dot and we so not want the dot
     file_extension = file_extension[1:].lower()
