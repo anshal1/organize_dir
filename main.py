@@ -6,6 +6,29 @@ supported_ext = ("png", "svg", "jpg", "jpeg", "pdf",
                  "exe", "xlsx", "csv", "mp4", "mp3", "msi", "zip", "html", "json", "webp")
 files = os.listdir(downloads_path)
 
+
+def ask_for_renaming(file: str, newpath: str, current_path: str) -> dict:
+    print(f"--- {file} already exists in the {newpath} directory ---")
+    permission = None
+    while True:
+        print("--- Enter y for Yes n for No ---")
+        permission = input(
+            "Would you like to save this file with different name: ").lower()
+        if permission == "y" or permission == "n":
+            break
+    if permission == "y":
+        tmpfiles = []
+        for _, __, files in os.walk(newpath):
+            if file in files:
+                tmpfiles.append(file)
+        renamedfile = f"{len(tmpfiles)}{file}"
+        os.rename(current_path, os.path.join(newpath, renamedfile))
+        # newcurrentpath = os.path.join(downloads_path, renamedfile)
+        # os.replace(newcurrentpath, os.path.join(newpath, renamedfile))
+        return {"success": 0, "name": renamedfile}
+    return {"success": 1, "name": "Action terminated"}
+
+
 # creating the folder with the name of extension only if the folder dosen't exists
 for ext in supported_ext:
     if not os.path.exists(os.path.join(downloads_path, ext)):
@@ -27,3 +50,15 @@ for file in files:
         # if file does not exists in the new path and exists in the current path, only then replace other wise do not do replacing
         if not os.path.exists(newpath) and os.path.exists(current_path):
             os.replace(current_path, newpath)
+        else:
+            newpath = os.path.join(downloads_path, file_extension)
+            success = ask_for_renaming(file, newpath, current_path)
+            if success["success"] == 0:
+                print(f"File rename to {
+                      success['name']} and saved successfully")
+            elif success["success"] == 1:
+                print(f"File rename to {
+                      success['name']} and saved successfully")
+
+
+print("Action Completed Successfuly")
