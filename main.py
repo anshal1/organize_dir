@@ -18,13 +18,14 @@ def ask_for_renaming(file: str, newpath: str, current_path: str) -> dict:
             break
     if permission == "y":
         tmpfiles = []
+        # getting the list of files from the path and if the every time we find the file with the same fielname passed as parameter append that in the tmpfiles list
         for _, __, files in os.walk(newpath):
             if file in files:
                 tmpfiles.append(file)
+        # renaming the file by prepending the len of tmp files in the name
         renamedfile = f"{len(tmpfiles)}{file}"
+        # renaming the file and storing it in the new folder
         os.rename(current_path, os.path.join(newpath, renamedfile))
-        # newcurrentpath = os.path.join(downloads_path, renamedfile)
-        # os.replace(newcurrentpath, os.path.join(newpath, renamedfile))
         return {"success": 0, "name": renamedfile}
     return {"success": 1, "name": "Action terminated"}
 
